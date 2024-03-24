@@ -1,17 +1,14 @@
 import sqlite3
 
-# Connect to SQLite database
 conn = sqlite3.connect('sqlite3.db')
 cursor = conn.cursor()
 
-# Drop existing tables if they exist (for testing purposes)
 cursor.executescript('''
 DROP TABLE IF EXISTS Advisor;
 DROP TABLE IF EXISTS Student;
 DROP TABLE IF EXISTS Student_Advisor;
 ''')
 
-# Create tables
 cursor.executescript('''
 CREATE TABLE Advisor( 
     AdvisorID INTEGER NOT NULL PRIMARY KEY, 
@@ -32,7 +29,6 @@ CREATE TABLE Student_Advisor(
 );
 ''')
 
-# Populate tables with sample data
 cursor.executescript('''
 INSERT INTO Advisor(AdvisorID, AdvisorName) VALUES 
 (1,"John Paul"), 
@@ -66,7 +62,6 @@ INSERT INTO Student_Advisor(StudentID, AdvisorID) VALUES
 (510, 1);
 ''')
 
-# Retrieve list of advisors with the number of their students
 cursor.execute('''
 SELECT Advisor.AdvisorID, Advisor.AdvisorName, COUNT(Student_Advisor.StudentID) AS NumStudents
 FROM Advisor
@@ -75,7 +70,6 @@ GROUP BY Advisor.AdvisorID
 ORDER BY Advisor.AdvisorID
 ''')
 
-# Print the result
 print("List of Advisors with Number of Students:")
 for row in cursor.fetchall():
     advisor_id, advisor_name, num_students = row
